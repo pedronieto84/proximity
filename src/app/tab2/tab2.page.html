@@ -1,9 +1,32 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Tab Two
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            Tab Two
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+    <div>
+        <h3>
+            Live Data Demo
+            <small>
+            <a href="https://github.com/swimlane/ngx-datatable/blob/master/demo/basic/live.component.ts" target="_blank">
+              Source
+            </a>
+          </small>
+            <small>
+            <a href="javascript:void(0)" (click)="start()">Start</a> |
+            <a href="javascript:void(0)" (click)="stop()">Stop</a> | 
+            <a href="javascript:void(0)" (click)="add()">Add</a> |
+            <a href="javascript:void(0)" (click)="remove()">Remove</a>
+          </small>
+        </h3>
+        <ngx-datatable #mydatatable class="material" [headerHeight]="50" [limit]="5" [columnMode]="'force'" [footerHeight]="50" [rowHeight]="'auto'" [trackByProp]="'updated'" [rows]="rows">
+            <ngx-datatable-column name="Name"></ngx-datatable-column>
+            <ngx-datatable-column name="Gender"></ngx-datatable-column>
+            <ngx-datatable-column name="Company"></ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</ion-content>
