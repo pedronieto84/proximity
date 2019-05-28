@@ -25,5 +25,9 @@
         </div>
     </div>
 
+    <button (click)="initDashboard()">Data Dashboard</button>
+    <div *ngFor="let item of dashboard">
+        {{item | json}}
+    </div>
 
 </ion-content>
