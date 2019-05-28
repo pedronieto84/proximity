@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { DataService } from '../service/data/data.service';
 //import * as pluginAnnotations from 'chartjs-plugin-annotation';
+
 
 
 @Component({
@@ -11,6 +13,8 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 })
 export class Tab1Page implements OnInit{
 
+  dashboard: any;
+  dashboard$: any;
 
   public lineChartData: ChartDataSets[] = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
@@ -91,9 +95,29 @@ export class Tab1Page implements OnInit{
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
-  constructor() { }
+  constructor(public data: DataService) { }
 
-  ngOnInit() {
+  initDashboard(){
+    console.log('Inicializando initDashboard');
+    debugger;
+    this.dashboard$ = this.data.dashboardGet().subscribe((data) => {
+      debugger;
+      this.dashboard = data;
+    });
+    debugger;
+    console.log(this.dashboard);
+  }
+
+  ngOnDestroy(): void {
+    this.dashboard$.unsubscribe();
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
+  }
+
+  async ngOnInit() {
+    /* console.log('Inicializando ngOnInit');
+    await this.initDashboard(); */
   }
 
   public randomize(): void {
