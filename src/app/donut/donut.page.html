@@ -1,11 +1,14 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>donut</ion-title>
+        <ion-title>{{ codigo }}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
     <a [routerLink]="['/']"> Atras </a>
+    <button (click)="presentToastWithOptions()">Toast</button>
+    <button (click)="presentAlertRadio()">Alert</button>
+
     <div>
         <div>
             <div style="display: block">

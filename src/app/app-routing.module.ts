@@ -5,11 +5,7 @@ const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'donut',
   children:[
-    {path: ':dataset',
-    children: [
-     { path: ':label', loadChildren : './donut/donut.module#DonutPageModule'}
-    ] 
-  } 
+    {path: ':label', loadChildren : './donut/donut.module#DonutPageModule'}  
   ]
 }
 ];

@@ -3,6 +3,7 @@ import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import { Router } from '@angular/router';
 import { DataService } from '../service/data/data.service';
+import { forEach } from '@angular/router/src/utils/collection';
 //import * as pluginAnnotations from 'chartjs-plugin-annotation';
 
 
@@ -12,16 +13,16 @@ import { DataService } from '../service/data/data.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit{
+export class Tab1Page implements OnInit {
 
   dashboard: any;
   dashboard$: any;
 
   public lineChartData: ChartDataSets[] = [
-    { data: [1, 3], label: 'Series A' },
-    { data: [2, 4], label: 'Series C' }
+    { data: [], label: 'Reclamaciones abiertas' },
+    { data: [], label: 'Reclamaciones cerradas' }
   ];
-  public lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels: Label[] = [];
  
  
   public lineChartOptions: (ChartOptions & { annotation: any }) = {
@@ -104,33 +105,62 @@ export class Tab1Page implements OnInit{
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
 
-  constructor(public data: DataService, private router: Router  ) { }
+  constructor(public data: DataService, private router: Router) { }
 
   initDashboard(){
     console.log('Inicializando initDashboard');
-    debugger;
-    this.dashboard$ = this.data.dashboardGet().subscribe((data) => {
-      debugger;
+    this.dashboard$ = this.data.dashboardGet().subscribe((data:any) => {
       this.dashboard = data;
+      let instalacion; 
+
+      data.forEach ((item, index) => {
+        console.log(item); 
+        let totalReclamaciones = item.totalReclamaciones; 
+        let reclamacionesCerradas = item.reclamacionesCerradas; 
+        let reclamacionesAbiertas = totalReclamaciones - reclamacionesCerradas; 
+        let codigoInstalacion = item.codInstalacion;
+        this.lineChartLabels.push(codigoInstalacion); 
+        this.lineChartData[0].data.push(reclamacionesAbiertas); 
+        this.lineChartData[1].data.push(reclamacionesCerradas); 
+        console.log(reclamacionesAbiertas); 
+      }); 
     });
-    debugger;
     console.log(this.dashboard);
   }
 
-  ngOnDestroy(): void {
-    this.dashboard$.unsubscribe();
+  ionViewDidLoad() {
+    console.log("ionViewDidLoad"); 
+  }
+
+  ionViewWillLoad()  {
+    console.log("ionViewWillLoad"); 
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     
   }
 
-  async ngOnInit() {
-    /* console.log('Inicializando ngOnInit');
-    await this.initDashboard(); */
+  inViewWillLeave(){
+    console.log("will leave"); 
   }
 
-  clickGrafico(label : string, value : string){
-    this.router.navigate(['donut', label, value]); 
+  inViewWillUnload(){
+    console.log("will unload"); 
+  }
+
+  inViewDidLeave(){
+    console.log("did leave"); 
+  }
+
+  ngOnInit() {
+    /* console.log('Inicializando ngOnInit');
+    await this.initDashboard(); */
+    this.initDashboard(); 
+  }
+
+  clickGrafico(label : string){
+    this.dashboard$.unsubscribe();
+    console.log(this.dashboard$); 
+    this.router.navigate(['donut', label]); 
   }
   // events
   public chartClicked(e: any): void {
@@ -146,7 +176,7 @@ export class Tab1Page implements OnInit{
         // get value by index
         const value = chart.data.datasets[0].data[clickedElementIndex];
         console.log(dataSet, label, value)
-        this.clickGrafico(label, value); 
+        this.clickGrafico(label); 
      }
     }
   }
